@@ -3,16 +3,16 @@
 // ============================================
 
 export const siteConfig = {
-  name: "JD",
-  fullName: "John Doe",
-  title: "Creative Developer",
-  email: "hello@example.com",
+  name: "JV",
+  fullName: "Joruka Vigneshwar",
+  title: "Software Developer",
+  email: "jorukavignesh.com",
   tagline: "Designer & developer crafting immersive web experiences with bold aesthetics and clean code.",
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "file:///C:/Users/joruk/OneDrive/Desktop/%E6%96%87%E4%BB%B6/Resumes/new%20Resume.pdf",
 };
 
 export const heroConfig = {
-  lines: ["I Build", "Digital", "Experiences"],
+  lines: ["I", "am", "Vigneshwar"],
 };
 
 export const aboutConfig = {
@@ -61,28 +61,18 @@ export const projectsConfig = [
 ];
 
 export const skillsConfig = [
-  "React",
-  "TypeScript",
-  "Next.js",
-  "Tailwind CSS",
-  "Framer Motion",
-  "Node.js",
-  "PostgreSQL",
-  "Figma",
-  "Three.js",
-  "GraphQL",
-  "Docker",
-  "AWS",
+  "java",
+  "C",
+  "C++",
   "Git",
   "Python",
-  "MongoDB",
+  "MySQL",
 ];
 
 export const socialsConfig = [
-  { platform: "GitHub", href: "https://github.com", color: "#ffffff" },
-  { platform: "LinkedIn", href: "https://linkedin.com", color: "#0A66C2" },
-  { platform: "Twitter", href: "https://twitter.com", color: "#1DA1F2" },
-  { platform: "Email", href: "mailto:hello@example.com", color: "#EA4335" },
+  { platform: "GitHub", href: "https://github.com/vigneshwar40", color: "#ffffff" },
+  { platform: "LinkedIn", href: "https://linkedin.com/in/joruka-vigneshwar-jv6626", color: "#0A66C2" },
+  { platform: "Email", href: "jorukavignesh@gmail.com", color: "#EA4335" },
 ];
 
 export const navLinks = [
