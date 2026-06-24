@@ -22,7 +22,16 @@ const AdminPanel = ({ open, onOpenChange, onSignOut }: AdminPanelProps) => {
 
   useEffect(() => { if (open) setForm(data); }, [open, data]);
 
-  const handleSave  = () => { save(form); toast.success("Portfolio updated!"); onOpenChange(false); };
+  const handleSave = () => {
+  save({
+    ...form,
+    theme,
+    template,
+  });
+
+  toast.success("Portfolio updated!");
+  onOpenChange(false);
+};
   const handleReset = () => { reset(); setForm(data); toast.info("Reset to defaults"); onOpenChange(false); };
 
   const handlePhoto = (key: "profilePhoto"|"aboutPhoto") => (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -115,17 +115,27 @@ export function useTemplate() {
 
 // ─── Portfolio data ───────────────────────────────────────────────────────────
 export interface PortfolioData {
-  site:typeof defaultSite; hero:typeof defaultHero; about:typeof defaultAbout;
-  projects:typeof defaultProjects; skills:typeof defaultSkills;
-  socials:typeof defaultSocials; navLinks:typeof defaultNavLinks;
-  profilePhoto:string; aboutPhoto:string;
+  site: typeof defaultSite;
+  hero: typeof defaultHero;
+  about: typeof defaultAbout;
+  projects: typeof defaultProjects;
+  skills: typeof defaultSkills;
+  socials: typeof defaultSocials;
+  navLinks: typeof defaultNavLinks;
+
+  profilePhoto: string;
+  aboutPhoto: string;
+
+  theme?: PortfolioTheme;
+  template?: PortfolioTemplate;
 }
 function getDefaults():PortfolioData {
   return { site:{...defaultSite}, hero:{lines:[...defaultHero.lines]},
     about:{heading:defaultAbout.heading,headingHighlight:defaultAbout.headingHighlight,paragraphs:[...defaultAbout.paragraphs]},
     projects:defaultProjects.map(p=>({...p})), skills:[...defaultSkills],
     socials:defaultSocials.map(s=>({...s})), navLinks:defaultNavLinks.map(n=>({...n})),
-    profilePhoto:"", aboutPhoto:"" };
+    profilePhoto:"", aboutPhoto:"",theme: BUILT_IN_THEMES[0],
+  template: BUILT_IN_TEMPLATES[0] };
 }
 function loadData():PortfolioData {
   try{ const r=localStorage.getItem(STORAGE_KEY);if(r)return{...getDefaults(),...JSON.parse(r)}; }catch{}
@@ -206,6 +216,16 @@ export function usePortfolioRead() {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (data.theme) {
+      applyTheme(data.theme);
+    }
+
+    if (data.template) {
+      applyTemplate(data.template);
+    }
+  }, [data]);
 
   return data;
 }
