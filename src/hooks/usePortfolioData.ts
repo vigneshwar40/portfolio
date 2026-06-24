@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/lib/supabase";
 import {
   siteConfig as defaultSite, heroConfig as defaultHero, aboutConfig as defaultAbout,
   projectsConfig as defaultProjects, skillsConfig as defaultSkills,
@@ -130,15 +131,81 @@ function loadData():PortfolioData {
   try{ const r=localStorage.getItem(STORAGE_KEY);if(r)return{...getDefaults(),...JSON.parse(r)}; }catch{}
   return getDefaults();
 }
-export function usePortfolioData(){
-  const [data,setData]=useState<PortfolioData>(loadData);
-  const save=useCallback((d:PortfolioData)=>{ setData(d);localStorage.setItem(STORAGE_KEY,JSON.stringify(d));window.dispatchEvent(new Event("portfolio-updated")); },[]);
-  const reset=useCallback(()=>{ localStorage.removeItem(STORAGE_KEY);const d=getDefaults();setData(d);window.dispatchEvent(new Event("portfolio-updated")); },[]);
-  useEffect(()=>{ const h=()=>setData(loadData());window.addEventListener("portfolio-updated",h);return()=>window.removeEventListener("portfolio-updated",h); },[]);
-  return {data,save,reset};
+export function usePortfolioData() {
+  const [data, setData] = useState<PortfolioData>(getDefaults());
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data: row } = await supabase
+        .from("portfolio_data")
+        .select("content")
+        .eq("id", 1)
+        .single();
+
+      if (row?.content) {
+        setData({
+          ...getDefaults(),
+          ...(row.content as PortfolioData),
+        });
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  const save = useCallback(async (d: PortfolioData) => {
+    setData(d);
+
+    await supabase
+      .from("portfolio_data")
+      .update({
+        content: d,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", 1);
+
+    window.dispatchEvent(new Event("portfolio-updated"));
+  }, []);
+
+  const reset = useCallback(async () => {
+    const defaults = getDefaults();
+
+    setData(defaults);
+
+    await supabase
+      .from("portfolio_data")
+      .update({
+        content: defaults,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", 1);
+
+    window.dispatchEvent(new Event("portfolio-updated"));
+  }, []);
+
+  return { data, save, reset };
 }
-export function usePortfolioRead(){
-  const [data,setData]=useState<PortfolioData>(loadData);
-  useEffect(()=>{ const h=()=>setData(loadData());window.addEventListener("portfolio-updated",h);return()=>window.removeEventListener("portfolio-updated",h); },[]);
+export function usePortfolioRead() {
+  const [data, setData] = useState<PortfolioData>(getDefaults());
+
+  useEffect(() => {
+    async function fetchData() {
+      const { data: row, error } = await supabase
+        .from("portfolio_data")
+        .select("content")
+        .eq("id", 1)
+        .single();
+
+      if (!error && row?.content) {
+        setData({
+          ...getDefaults(),
+          ...(row.content as PortfolioData),
+        });
+      }
+    }
+
+    fetchData();
+  }, []);
+
   return data;
 }
